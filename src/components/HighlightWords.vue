@@ -37,6 +37,8 @@ const wordsBySecond = computed(() => {
   return wordsBySecond;
 });
 
+console.log('wordsBySecond', wordsBySecond.value);
+
 const isWordActive = (word, index) => {
   let totalIndexUpToSecond = 0;
   const currentTime = Math.floor(props.currentTime);
@@ -58,19 +60,19 @@ const isWordActive = (word, index) => {
 </script>
 
 <template>
-  <div class="transcript-container px-8">
-    <span v-for="(word, index) of transcriptData.full_transcript.split(/\s+/)" :key="index"
-      :class="{ highlight: isWordActive(word, index) }">
-      {{ word }}&nbsp;
-    </span>
-    Current time: {{ currentTime }}
+  <div class="transcript-container flex justify-center items-center px-8 h-[calc(100%-84px)]">
+    <div class="flex items-center flex-wrap leading-[2.5rem]	">
+      <span v-for="(word, index) of transcriptData.full_transcript.split(/\s+/)" :key="index"
+        :class="{ highlight: isWordActive(word, index) }">
+        {{ word }}&nbsp;
+      </span>
+    </div>
   </div>
 </template>
 
 <style>
 .highlight {
   background-color: #3ac7ab;
-  padding: 4px 0;
   color: #fff;
 }
 </style>

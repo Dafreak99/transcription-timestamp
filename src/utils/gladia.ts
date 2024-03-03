@@ -19,13 +19,13 @@ async function pollForResult(resultUrl: string, headers: any) {
 }
 
 export async function startTranscription(audioUrl: string) {
-  const gladiaKey = '3191bd1a-8727-4687-83ec-b73c5de6862f	'
   const requestData = {
     audio_url: audioUrl,
   }
+  console.log((import.meta as any).env.VITE_APP_GLADIA_API_KEY)
   const gladiaUrl = 'https://api.gladia.io/v2/transcription/'
   const headers = {
-    'x-gladia-key': gladiaKey,
+    'x-gladia-key': (import.meta as any).env.VITE_APP_GLADIA_API_KEY,
     'Content-Type': 'application/json',
   }
 

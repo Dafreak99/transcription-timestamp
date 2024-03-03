@@ -6,7 +6,6 @@ import 'vidstack/player';
 import 'vidstack/player/ui';
 import 'vidstack/icons';
 
-import { isHLSProvider, type MediaAudioTrackChangeEvent, type MediaCanPlayEvent, type MediaProviderChangeEvent } from 'vidstack';
 import type { MediaPlayerElement } from 'vidstack/elements';
 import { ref } from 'vue';
 
@@ -21,8 +20,8 @@ import { startTranscription } from '../utils/gladia';
 
 const $player = ref<MediaPlayerElement>();
 const isUpLoading = ref(false);
-const isTranscripting = ref(false);
-const transcript = ref({} as any);
+const isTranscribing = ref(false);
+const transcript = ref({} as Record<string, any>);
 const isPlaying = ref(false);
 const currentTime = ref(-Infinity);
 const mediaURL = ref('');
@@ -30,11 +29,11 @@ const showUpload = ref(true);
 
 const updateMediaURL = async (url: string) => {
   mediaURL.value = url;
-  isTranscripting.value = true;
+  isTranscribing.value = true;
 
   const response = await startTranscription(url);
   transcript.value = response;
-  isTranscripting.value = false;
+  isTranscribing.value = false;
   showUpload.value = false;
 }
 
@@ -94,17 +93,17 @@ watch(isPlaying, (newVal, _) => {
       <file-uploader :updateMediaURL="updateMediaURL" :onUpload="onUpload" :onUploadSuccess="onUploadSuccess"
         :onUpLoadFailed="onUploadFailed" />
 
-      <div class="flex items-center px-4 pt-4 gap-2" v-if="isUpLoading || isTranscripting">
+      <div class="flex items-center px-4 pt-4 gap-2" v-if="isUpLoading || isTranscribing">
         <Spinner />
         <h3 v-if="isUpLoading">Uploading file to get back the public URL</h3>
-        <h3 v-if="isTranscripting">Sending to Gladia to transcript</h3>
+        <h3 v-if="isTranscribing">Sending to Gladia to transcribe</h3>
       </div>
     </div>
   </div>
 
-  <div class="w-[1200px]">
-    <media-player v-if="mediaURL && !isTranscripting" autoplay
-      class="w-full aspect-video text-white font-sans overflow-hidden rounded-md ring-media-focus data-[focus]:ring-4 border border-indigo-400"
+  <div class="w-[1200px] mx-auto" v-if="!showUpload">
+    <media-player v-if="mediaURL && !isTranscribing" autoplay
+      class="w-full aspect-video bg-black text-white font-sans overflow-hidden rounded-md ring-media-focus data-[focus]:ring-4 items-start"
       title="Sprite Fight" :src="mediaURL" playsinline @seeking="onSeeking" @playing="onPlaying" @pause="onPause"
       @end="onEnd" ref="$player">
       <media-provider>
@@ -114,7 +113,21 @@ watch(isPlaying, (newVal, _) => {
 
       <VideoLayout />
     </media-player>
+
+    <div class="flex justify-end mt-6" v-if="!showUpload">
+      <button type="button"
+        class="flex justify-center items-center text-white bg-indigo-700 hover:bg-blue-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800"
+        @click="showUpload = true">
+        <svg class="w-6 h-6 mr-1 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+          fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17.7 7.7A7.1 7.1 0 0 0 5 10.8M18 4v4h-4m-7.7 8.3A7.1 7.1 0 0 0 19 13.2M6 20v-4h4" />
+        </svg>
+        <p>Upload Again</p>
+      </button>
+    </div>
   </div>
+
 
 
 </template>

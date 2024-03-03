@@ -1,3 +1,27 @@
+<script>
+import { ref } from 'vue'
+import Sidebar from '../partials/Sidebar.vue'
+import Header from '../partials/Header.vue'
+import Player from '../components/Player.vue'
+
+export default {
+  name: 'Dashboard',
+  components: {
+    Sidebar,
+    Header,
+    Player
+  },
+  setup() {
+
+    const sidebarOpen = ref(false)
+
+    return {
+      sidebarOpen,
+    }
+  }
+}
+</script>
+
 <template>
   <div class="flex h-screen overflow-hidden">
 
@@ -25,27 +49,3 @@
 
   </div>
 </template>
-
-<script>
-import { ref } from 'vue'
-import Sidebar from '../partials/Sidebar.vue'
-import Header from '../partials/Header.vue'
-import Player from './Player.vue'
-
-export default {
-  name: 'Dashboard',
-  components: {
-    Sidebar,
-    Header,
-    Player
-  },
-  setup() {
-
-    const sidebarOpen = ref(false)
-
-    return {
-      sidebarOpen,
-    }
-  }
-}
-</script>
