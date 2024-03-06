@@ -1,4 +1,4 @@
-# Free Tailwind & Vue.js admin dashboard template
+# Transcription Timestamping
 
 ![Mosaic TailwindCSS template preview](https://github.com/cruip/vuejs-admin-dashboard-template/assets/2683512/2fdc15d1-316b-4c51-b357-84b32e79de60)
 

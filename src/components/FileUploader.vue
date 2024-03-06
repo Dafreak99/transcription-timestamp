@@ -2,33 +2,27 @@
 import { ref } from 'vue';
 
 const props = defineProps({
-    updateMediaURL: {
+    onTranscribe: {
         type: Function,
         default: () => { },
     },
-    onUpload: {
+    onTranscribeSuccess: {
         type: Function,
         default: () => { },
     },
-    onUploadSuccess: {
-        type: Function,
-        default: () => { },
-    },
-    onUploadFailed: {
+    onTranscribeFailed: {
         type: Function,
         default: () => { },
     },
 });
 
-const uploadError = ref(null);
-const mediaUrl = ref(null);
 const isLoading = ref(false);
 
 const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    props.onUpload();
+    props.onTranscribe();
 
     const url = `http://127.0.0.1:8000/upload/`;
     const fd = new FormData();
@@ -44,14 +38,10 @@ const handleFileUpload = async (e) => {
 
         const data = await response.json();
 
-        props.updateMediaURL(data.public_url);
-        mediaUrl.value = data.public_url;
-
-        props.onUploadSuccess();
+        props.onTranscribeSuccess(data);
     } catch (error) {
-        console.error('Error uploading the file:', error);
-        uploadError.value = 'Error uploading the file';
-        props.onUploadFailed();
+        console.error('Error transcribing the file:', error);
+        props.onTranscribeFailed();
     }
 
     isLoading.value = false;
